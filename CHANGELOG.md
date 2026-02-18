@@ -1,3 +1,9 @@
+# For the next release
+
+  * ** Johannes Starosta**
+    * Architectures of mirrors are now saved in mirror config and used in aptly-mirror-update.py, otherwise 
+      architectures all only mirrors wouldn't work
+
 # Patch Release v1.1.2 (2026-01-28)
   * **Johannes Starosta**
     * Use keyring file instead of apt-key due to deprecation/removal of apt-key in recent Debian and Ubuntu releases
