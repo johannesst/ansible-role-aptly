@@ -279,10 +279,14 @@ def publish_multi(client, sources, mirror_config, async_run: bool):
     publish = Publish(client)
     distribution = mirror_config.get("mirror_distribution")
     prefix = mirror_config.get("mirror_prefix")
+    architectures: list[str] = [],
+    if mirror_config.get("mirror_architectures"):
+        architectures = mirror_config.get("mirror_architectures")
     if publish.check_if_exists(name=distribution, prefix=prefix):
         publish.switch_snapshot(
             snapshots=sources,
             prefix=prefix,
+            architectures=architectures,
             distribution=distribution,
             async_run=async_run,
         )
@@ -292,6 +296,7 @@ def publish_multi(client, sources, mirror_config, async_run: bool):
             distribution=distribution,
             origin=mirror_config.get("mirror_origin"),
             label=mirror_config.get("mirror_label"),
+            architectures=architectures,
             prefix=prefix,
             async_run=async_run,
         )
