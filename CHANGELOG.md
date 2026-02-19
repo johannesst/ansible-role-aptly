@@ -1,8 +1,10 @@
 # For the next release
 
   * ** Johannes Starosta**
-    * Reuse variables instead reloading values from configuration in publish_mirror function in aptly-mirror-update.py
+    * Architectures of mirrors are now saved in mirror config and used in aptly-mirror-update.py, otherwise 
+      architectures all only mirrors wouldn't work
     * New parameter publish_children in mirrors config allows multi-component publishing
+    * Reuse variables instead reloading values from configuration in publish_mirror function in aptly-mirror-update.py
 
 # Patch Release v1.1.2 (2026-01-28)
   * **Johannes Starosta**

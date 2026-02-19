@@ -33,3 +33,10 @@ mirror_prefix: '{{ aptly__mirror_base.publish_prefix }}'
 {% if aptly__mirror_base.origin is defined and aptly__mirror_base.origin | length > 0 %}
 mirror_origin: '{{ aptly__mirror_base.origin }}'
 {% endif %}
+
+{% if aptly__mirror.architectures is defined and mirror_architectures is not defined %}
+mirror_architectures:
+{% for architecture in aptly__mirror.architectures %}
+  - '{{ architecture }}'
+{% endfor %}
+{% endif %}

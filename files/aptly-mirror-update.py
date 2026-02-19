@@ -229,6 +229,7 @@ class Publish:
         self,
         snapshots: list[dict],
         prefix=".",
+        architectures: list[str] = [],
         distribution="",
         force_overwrite: bool = True,
         async_run: bool = True,
@@ -240,7 +241,7 @@ class Publish:
         )
 
         endpoint = f"/publish/{prefix}/{distribution}"
-        payload = {"ForceOverwrite": force_overwrite, "Snapshots": snapshots}
+        payload = {"ForceOverwrite": force_overwrite, "Architectures": architectures, "Snapshots": snapshots}
 
         switch_snapshot_task = self.client.put(
             endpoint=endpoint, payload=json.dumps(payload), params={"_async": async_run}
@@ -299,6 +300,9 @@ def publish_mirror(client, mirror_name, mirror_config, current_day, async_run: b
     publish = Publish(client)
     distribution = mirror_config.get("mirror_distribution")
     prefix = mirror_config.get("mirror_prefix")
+    architectures: list[str] = [],
+    if mirror_config.get("mirror_architectures"):
+        architectures = mirror_config.get("mirror_architectures")
 
     if publish.check_if_exists(name=distribution, prefix=prefix):
         sources = next(
@@ -315,6 +319,7 @@ def publish_mirror(client, mirror_name, mirror_config, current_day, async_run: b
         publish.switch_snapshot(
             snapshots=sources,
             prefix=prefix,
+            architectures=architectures,
             distribution=distribution,
             async_run=async_run,
         )
@@ -325,7 +330,8 @@ def publish_mirror(client, mirror_name, mirror_config, current_day, async_run: b
             distribution=distribution,
             origin=mirror_config.get("mirror_origin"),
             label=mirror_config.get("mirror_label"),
-            prefix=prefix,
+            architectures=architectures,
+            prefix=mirror_config.get("mirror_prefix"),
             async_run=async_run,
         )
 
