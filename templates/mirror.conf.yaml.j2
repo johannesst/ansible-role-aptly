@@ -16,6 +16,15 @@ mirror_distribution: '{{ aptly__mirror.distribution }}'
 {% if aptly__mirror_base.label is defined and aptly__mirror_base.label | length > 0 %}
 mirror_label: '{{ aptly__mirror_base.label }}'
 {% endif %}
+{% if aptly__mirror_skip_contents is defined and aptly__mirror_skip_contents | length > 0 %}
+mirror_skip_contents: '{{ aptly__mirror_skip_contents }}'
+{% else %}
+  {% if aptly__skip_contents is defined and aptly__skip_contents | length > 0 %}
+mirror_skip_contents: '{{ aptly__skip_contents }}'
+  {% else %}
+mirror_skip_contents: false
+  {% endif %}
+{% endif %}
 {% if aptly__mirror_base.publish_prefix is defined and aptly__mirror_base.publish_prefix | length > 0 %}
 mirror_prefix: '{{ aptly__mirror_base.publish_prefix }}'
 {% endif %}

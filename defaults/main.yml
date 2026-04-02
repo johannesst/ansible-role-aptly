@@ -15,6 +15,8 @@ aptly__repositories: []
 aptly__gpg_private_key: ""
 aptly__gpg_public_key: ""
 
+aptly__publish_skip_contents: false
+
 aptly__api_enable: true
 aptly__api_listen_address: "127.0.0.1"
 aptly__api_listen_port: 9091

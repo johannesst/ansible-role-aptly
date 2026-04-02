@@ -201,6 +201,7 @@ class Publish:
         label="",
         architectures: list[str] = [],
         prefix=".",
+        skip_contents: bool = False,
         async_run: bool = True,
         wait: bool = True,
     ):
@@ -217,6 +218,7 @@ class Publish:
             "Label": label,
             "Origin": origin,
             "Architectures": architectures,
+            "SkipContents": skip_contents,
         }
 
         publish_from_snapshot_task = self.client.post(
@@ -230,6 +232,7 @@ class Publish:
         snapshots: list[dict],
         prefix=".",
         distribution="",
+        skip_contents: bool = False,
         force_overwrite: bool = True,
         async_run: bool = True,
         wait: bool = True,
@@ -240,7 +243,8 @@ class Publish:
         )
 
         endpoint = f"/publish/{prefix}/{distribution}"
-        payload = {"ForceOverwrite": force_overwrite, "Snapshots": snapshots}
+        payload = {"ForceOverwrite": force_overwrite, "Architectures": architectures, "Snapshots": snapshots, "SkipContents": skip_contents, }
+
 
         switch_snapshot_task = self.client.put(
             endpoint=endpoint, payload=json.dumps(payload), params={"_async": async_run}
@@ -278,6 +282,8 @@ def publish_mirror(client, mirror_name, mirror_config, current_day, async_run: b
     publish = Publish(client)
     distribution = mirror_config.get("mirror_distribution")
     prefix = mirror_config.get("mirror_prefix")
+    prefix = mirror_config.get("mirror_prefix")
+    skip_contents = mirror_config.get("mirror_skip_contents")
 
     if publish.check_if_exists(name=distribution, prefix=prefix):
         sources = next(
@@ -295,6 +301,7 @@ def publish_mirror(client, mirror_name, mirror_config, current_day, async_run: b
             snapshots=sources,
             prefix=prefix,
             distribution=distribution,
+            skip_contents=skip_contents,
             async_run=async_run,
         )
     else:
@@ -304,6 +311,7 @@ def publish_mirror(client, mirror_name, mirror_config, current_day, async_run: b
             origin=mirror_config.get("mirror_origin"),
             label=mirror_config.get("mirror_label"),
             prefix=mirror_config.get("mirror_prefix"),
+            skip_contents=skip_contents,
             async_run=async_run,
         )
 
