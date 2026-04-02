@@ -283,6 +283,7 @@ def publish_multi(client, sources, mirror_config, async_run: bool):
     distribution = mirror_config.get("mirror_distribution")
     prefix = mirror_config.get("mirror_prefix")
     architectures: list[str] = [],
+    skip_contents = mirror_config.get("mirror_skip_contents")
     if mirror_config.get("mirror_architectures"):
         architectures = mirror_config.get("mirror_architectures")
     if publish.check_if_exists(name=distribution, prefix=prefix):
@@ -291,6 +292,7 @@ def publish_multi(client, sources, mirror_config, async_run: bool):
             prefix=prefix,
             architectures=architectures,
             distribution=distribution,
+            skip_contents=skip_contents,
             async_run=async_run,
         )
     else:
@@ -301,6 +303,7 @@ def publish_multi(client, sources, mirror_config, async_run: bool):
             label=mirror_config.get("mirror_label"),
             architectures=architectures,
             prefix=prefix,
+            skip_contents=skip_contents,
             async_run=async_run,
         )
 
@@ -428,7 +431,7 @@ def main():
         parent_snapshot.merge(snapshots=snapshots, package_refs=packages)
 
         print("Switch publish to new snapshot")
-        if mirror_config.get("publish_children"):
+        if mirror_config.get("mirror_publish_children"):
             publish_multi(client, sources, mirror_config, mirror_async)	
         else:
             publish_mirror(client, mirror_name, mirror_config, current_day, mirror_async)

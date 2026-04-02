@@ -4,8 +4,8 @@
 {% if mirror_children is defined and mirror_children %}
 mirror_parent: '{{ aptly__mirror_base.name }}'
 {% endif %}
-{% if aptly__mirror_base.publish_children is defined and  publish_children is not defined %}
-publish_children: true
+{% if aptly__mirror_base.publish_children is defined and mirror_publish_children is not defined %}
+mirror_publish_children: {{ aptly__mirror_base.publish_children | lower() }}
 {% endif %}
 {% if aptly__mirror_base.childrens is defined and mirror_children is not defined %}
 mirror_childrens:
@@ -27,14 +27,14 @@ mirror_distribution: '{{ aptly__mirror.distribution }}'
 {% if aptly__mirror_base.label is defined and aptly__mirror_base.label | length > 0 %}
 mirror_label: '{{ aptly__mirror_base.label }}'
 {% endif %}
-{% if aptly__mirror_skip_contents is defined and aptly__mirror_skip_contents | length > 0 %}
-mirror_skip_contents: '{{ aptly__mirror_skip_contents }}'
+{% if aptly__mirror_base.skip_contents is defined and mirror_skip_contents is not defined %}
+mirror_skip_contents: {{ aptly__mirror_base.skip_contents | lower() }}
 {% else %}
-  {% if aptly__skip_contents is defined and aptly__skip_contents | length > 0 %}
-mirror_skip_contents: '{{ aptly__skip_contents }}'
-  {% else %}
+{% if aptly__skip_contents is defined and mirror_skip_contents is not defined %}
+mirror_skip_contents: {{ aptly__skip_contents | lower() }}
+{% else %}
 mirror_skip_contents: false
-  {% endif %}
+{% endif %}
 {% endif %}
 {% if aptly__mirror_base.publish_prefix is defined and aptly__mirror_base.publish_prefix | length > 0 %}
 mirror_prefix: '{{ aptly__mirror_base.publish_prefix }}'
